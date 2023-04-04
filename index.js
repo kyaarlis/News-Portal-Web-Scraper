@@ -99,14 +99,19 @@ app.get('/', async (req, res) => {
             <img src="${delfiData.imageSrc}" alt="${delfiData.headingText}" width="400">
             <h2>${delfiData.headingText}</h2>    
         </a>
+        <h3>Avots: Delfi.lv</h3>
+       
         <a href="${tvnetData.articleUrl}" target="_blank">
             <img src="${tvnetData.imageSrc}" alt="${tvnetData.headingText}" width="400">
             <h2>${tvnetData.headingText}</h2>    
         </a>
+        <h3>Avots: Tvnet.lv</h3>
+        
         <a href="https://www.lsm.lv/${LSMData.articleUrl}" target="_blank">
             <img src="${LSMData.imageSrc}" alt="${LSMData.headingText}" width="400">
             <h2>${LSMData.headingText}</h2>    
         </a>
+        <h3>Avots: Lsm.lv</h3>
     `)
 })
 
