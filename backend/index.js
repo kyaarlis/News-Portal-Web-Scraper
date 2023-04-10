@@ -5,6 +5,16 @@ const axios = require("axios")
 const app = express()
 const port = 3000
 
+app.use(express.static('frontend'));
+
+// Set up a middleware to add CORS headers to the response
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+
 
 async function performDelfiScraping() {
     // downloading the target web page
@@ -89,30 +99,29 @@ async function performTVnetScraping() {
   }
 
 
-app.get('/', async (req, res) => {
+app.get('/data', async (req, res) => {
     const delfiData = await performDelfiScraping()
     const tvnetData = await performTVnetScraping()
     const LSMData = await performLsmScraping()
 
-    res.send(`
-        <a href="${delfiData.articleUrl}" target="_blank">
-            <img src="${delfiData.imageSrc}" alt="${delfiData.headingText}" width="400">
-            <h2>${delfiData.headingText}</h2>    
-        </a>
-        <h3>Avots: Delfi.lv</h3>
-       
-        <a href="${tvnetData.articleUrl}" target="_blank">
-            <img src="${tvnetData.imageSrc}" alt="${tvnetData.headingText}" width="400">
-            <h2>${tvnetData.headingText}</h2>    
-        </a>
-        <h3>Avots: Tvnet.lv</h3>
-        
-        <a href="https://www.lsm.lv/${LSMData.articleUrl}" target="_blank">
-            <img src="${LSMData.imageSrc}" alt="${LSMData.headingText}" width="400">
-            <h2>${LSMData.headingText}</h2>    
-        </a>
-        <h3>Avots: Lsm.lv</h3>
-    `)
+    const delfi = {
+        articleUrl: delfiData.articleUrl,
+        imageSrc: delfiData.imageSrc,
+        headingText: delfiData.headingText
+      };
+
+      const tvnet = {
+        articleUrl: tvnetData.articleUrl,
+        imageSrc: tvnetData.imageSrc,
+        headingText: tvnetData.headingText
+      };
+      const lsm = {
+        articleUrl: LSMData.articleUrl,
+        imageSrc: LSMData.imageSrc,
+        headingText: LSMData.headingText
+      };
+
+      res.json({delfi, tvnet, lsm})
 })
 
 app.listen(port, () => {

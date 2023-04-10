@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="data"></div>
+    
+    <script>
+// Get a reference to the data element
+  const dataElem = document.getElementById('data');
+
+// Make an HTTP request to get the data from the server
+fetch('http://localhost:3000/data')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data)
+    // Display the data in the data element
+    dataElem.innerHTML = `
+    <a href="${data.delfi.articleUrl}" target="_blank">
+  <img src="${data.delfi.imageSrc}" alt="${data.delfi.headingText}" width="400">
+  <h2>${data.delfi.headingText}</h2>    
+</a>
+<h3>Avots: Delfi.lv</h3>
+<a href="${data.tvnet.articleUrl}" target="_blank">
+  <img src="${data.tvnet.imageSrc}" alt="${data.tvnet.headingText}" width="400">
+  <h2>${data.tvnet.headingText}</h2>    
+</a>
+<h3>Avots: Tvnet.lv</h3>
+
+<a href="https://www.lsm.lv/${data.lsm.articleUrl}" target="_blank">
+  <img src="${data.lsm.imageSrc}" alt="${data.lsm.headingText}" width="400">
+  <h2>${data.lsm.headingText}</h2>    
+</a>
+<h3>Avots: Lsm.lv</h3>
+`;
+  });
+    </script>
+  </body>
+</html>
+
