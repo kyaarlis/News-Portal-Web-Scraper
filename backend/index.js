@@ -44,6 +44,8 @@ async function performDelfiScraping() {
 }
 
 
+
+
 async function performTVnetScraping() {
     // downloading the target web page
     // by performing an HTTP GET request in Axios
@@ -98,12 +100,57 @@ async function performTVnetScraping() {
     }
   }
 
+  async function performKalendarsScraping() {
+    // downloading the target web page
+    // by performing an HTTP GET request in Axios
+    const axiosResponse = await axios.request({
+        method: "GET",
+        url: "https://xn--kalendrs-m7a.lv/%C5%A1odien",
+        headers: {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
+        }
+    })
+  
+    const $ = cheerio.load(axiosResponse.data)
+
+    const tradicionalNames = $('.day-left .day-common li').text().trim().replace(/([A-Z])/g, ', $1').trim().slice(2)
+    const names = $('p.day-common').text()
+  
+    return {
+        names: names,
+        tradicionalNames: tradicionalNames
+    }
+  }
+
+  async function performBitcoinScraping() {
+    // downloading the target web page
+    // by performing an HTTP GET request in Axios
+    const axiosResponse = await axios.request({
+        method: "GET",
+        url: "https://www.google.com/search?q=bitcoin+value&oq=bitcoin+value&aqs=chrome..69i57j0i512l9.2961j1j4&sourceid=chrome&ie=UTF-8",
+        headers: {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
+        }
+    })
+  
+    const $ = cheerio.load(axiosResponse.data)
+
+    const value = $('.pclqee').text()
+    // console.log(value)
+  
+    return {
+        value: value,  
+    }
+  }
+
 
 app.get('/data', async (req, res) => {
-    const [delfiData, tvnetData, LSMData] = await Promise.all([
+    const [delfiData, tvnetData, LSMData, KalendarsData, BitCoinData] = await Promise.all([
         performDelfiScraping(), 
         performTVnetScraping(), 
-        performLsmScraping()
+        performLsmScraping(),
+        performKalendarsScraping(),
+        performBitcoinScraping()
       ])
 
     const delfi = {
@@ -117,13 +164,21 @@ app.get('/data', async (req, res) => {
         imageSrc: tvnetData.imageSrc,
         headingText: tvnetData.headingText
       };
+
       const lsm = {
         articleUrl: LSMData.articleUrl,
         imageSrc: LSMData.imageSrc,
         headingText: LSMData.headingText
       };
 
-      res.json({delfi, tvnet, lsm})
+      const kalendars = {
+        names: KalendarsData.names,
+        tradicionalNames: KalendarsData.tradicionalNames
+      }
+
+      const bitcoin = {value: BitCoinData.value}
+
+      res.json({delfi, tvnet, lsm, kalendars, bitcoin})
 })
 
 app.listen(port, () => {

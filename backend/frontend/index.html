@@ -20,6 +20,7 @@ fetch('http://localhost:3000/data')
     console.log(data)
     // Display the data in the data element
     dataElem.innerHTML = `
+    <h3>Bitcoin vērtība: ${data.bitcoin.value}€</h3>
     <div style='display: flex;
     align-items: center;
     justify-content: top;
@@ -30,7 +31,7 @@ fetch('http://localhost:3000/data')
   <img src="${data.delfi.imageSrc}" alt="${data.delfi.headingText}" width="400">
   <h2>${data.delfi.headingText}</h2>    
 </a>
-<h3>Avots: Delfi.lv</h3>
+
 </div>
 <div>
   <h1>Populārākā Tvnet ziņa</h1>
@@ -38,7 +39,7 @@ fetch('http://localhost:3000/data')
   <img src="${data.tvnet.imageSrc}" alt="${data.tvnet.headingText}" width="400">
   <h2>${data.tvnet.headingText}</h2>    
 </a>
-<h3>Avots: Tvnet.lv</h3>
+
 </div>
 <div>
   <h1>Populārākā LSM ziņa</h1>
@@ -46,9 +47,12 @@ fetch('http://localhost:3000/data')
   <img src="${data.lsm.imageSrc}" alt="${data.lsm.headingText}" width="400">
   <h2>${data.lsm.headingText}</h2>    
 </a>
-<h3>Avots: Lsm.lv</h3>
 </div>
 </div>
+<div>
+  <h5>Šodien varda dienu svin: ${data.kalendars.names}</h5>
+  <h5>Tradicionāli latviešu vārdi šodien: ${data.kalendars.tradicionalNames}</h5>
+  </div>
 `;
   });
     </script>
