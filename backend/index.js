@@ -100,9 +100,11 @@ async function performTVnetScraping() {
 
 
 app.get('/data', async (req, res) => {
-    const delfiData = await performDelfiScraping()
-    const tvnetData = await performTVnetScraping()
-    const LSMData = await performLsmScraping()
+    const [delfiData, tvnetData, LSMData] = await Promise.all([
+        performDelfiScraping(), 
+        performTVnetScraping(), 
+        performLsmScraping()
+      ])
 
     const delfi = {
         articleUrl: delfiData.articleUrl,
