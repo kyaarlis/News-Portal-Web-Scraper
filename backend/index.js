@@ -5,16 +5,7 @@ const axios = require("axios")
 const app = express()
 const port = 3000
 
-app.use(express.static('frontend'));
-
-// Set up a middleware to add CORS headers to the response
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
-
+app.set('view engine', 'ejs');
 
 async function performDelfiScraping() {
     // downloading the target web page
@@ -42,8 +33,6 @@ async function performDelfiScraping() {
         articleUrl: articleUrl,
     }
 }
-
-
 
 
 async function performTVnetScraping() {
@@ -144,7 +133,7 @@ async function performTVnetScraping() {
   }
 
 
-app.get('/data', async (req, res) => {
+app.get('/', async (req, res) => {
     const [delfiData, tvnetData, LSMData, KalendarsData, BitCoinData] = await Promise.all([
         performDelfiScraping(), 
         performTVnetScraping(), 
@@ -153,34 +142,17 @@ app.get('/data', async (req, res) => {
         performBitcoinScraping()
       ])
 
-    const delfi = {
-        articleUrl: delfiData.articleUrl,
-        imageSrc: delfiData.imageSrc,
-        headingText: delfiData.headingText
-      };
-
-      const tvnet = {
-        articleUrl: tvnetData.articleUrl,
-        imageSrc: tvnetData.imageSrc,
-        headingText: tvnetData.headingText
-      };
-
-      const lsm = {
-        articleUrl: LSMData.articleUrl,
-        imageSrc: LSMData.imageSrc,
-        headingText: LSMData.headingText
-      };
-
-      const kalendars = {
-        names: KalendarsData.names,
-        tradicionalNames: KalendarsData.tradicionalNames
-      }
-
-      const bitcoin = {value: BitCoinData.value}
-
-      res.json({delfi, tvnet, lsm, kalendars, bitcoin})
+      res.render('index', {
+        delfi: delfiData,
+        tvnet: tvnetData,
+        lsm: LSMData,
+        kalendars: KalendarsData,
+        bitcoin: BitCoinData
+      })
 })
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
+  console.log(`http://localhost:${port}`)
 })
