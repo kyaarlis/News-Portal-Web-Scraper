@@ -1,31 +1,23 @@
+<link rel="stylesheet" href="/style.css">
+
 <h3>Bitcoin vērtība: <%= bitcoin.value %>€</h3>
     <div style='display: flex;
     align-items: center;
     justify-content: top;
     gap: 10px'>
-      <div>
-    <h1>Populārākā Delfi ziņa</h1>
-    <a href="<%=delfi.articleUrl %>" target="_blank">
-  <img src="<%=delfi.imageSrc %>" alt="<%=delfi.headingText %>" width="400">
-  <h2><%=delfi.headingText %></h2>    
-</a>
+
+<% for (let i = 0; i < news.length; i++) { %>
+    <div>
+        <h1>Populārākā <%= news[i].name %> ziņa</h1>
+        <a href="<%= news[i].data.articleUrl %>" target="_blank">
+            <img src="<%= news[i].data.imageSrc %>" alt="<%= news[i].data.headingText %>" width="400">
+            <h2><%= news[i].data.headingText %></h2>    
+        </a>
+    </div>
+<% } %>
 </div>
 <div>
-  <h1>Populārākā Tvnet ziņa</h1>
-<a href="<%=tvnet.articleUrl %>" target="_blank">
-  <img src="<%=tvnet.imageSrc %>" alt="<%=tvnet.headingText %>" width="400">
-  <h2><%=tvnet.headingText %></h2>    
-</a>
-</div>
-<div>
-  <h1>Populārākā LSM ziņa</h1>
-<a href="https://www.lsm.lv/<%=lsm.articleUrl %>" target="_blank">
-  <img src="<%=lsm.imageSrc %>" alt="<%=lsm.headingText %>" width="400">
-  <h2><%=lsm.headingText %></h2>    
-</a>
-</div>
-</div>
-<div>
-  <h5>Šodien varda dienu svin: <%=kalendars.names %></h5>
-  <h5>Tradicionāli latviešu vārdi šodien: <%=kalendars.tradicionalNames %></h5>
+  <h4>Šodien varda dienu svin: <%= kalendars.names %></h4>
+  <h5>Tradicionāli latviešu vārdi šodien: <%= kalendars.tradicionalNames %></h5>
   </div>
+  

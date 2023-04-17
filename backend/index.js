@@ -6,6 +6,7 @@ const app = express()
 const port = 3000
 
 app.set('view engine', 'ejs');
+app.use(express.static('public'));
 
 async function performDelfiScraping() {
     // downloading the target web page
@@ -142,10 +143,23 @@ app.get('/', async (req, res) => {
         performBitcoinScraping()
       ])
 
+      const news = [
+        {
+          name: "delfi",
+          data: delfiData
+        },
+        {
+          name: "tvnet",
+          data: tvnetData
+        },
+        {
+          name: "lsm",
+          data: LSMData
+        }
+      ]
+
       res.render('index', {
-        delfi: delfiData,
-        tvnet: tvnetData,
-        lsm: LSMData,
+        news: news,
         kalendars: KalendarsData,
         bitcoin: BitCoinData
       })
